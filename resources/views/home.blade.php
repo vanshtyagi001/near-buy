@@ -1,42 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- Hero Section -->
-<div class="bg-white border border-gray-200 rounded-2xl p-6 md:p-12 mb-8 text-center shadow-sm">
-    <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
-        Discover Local Deals in <span class="text-blue-600">{{ session('selected_city_name', 'Your City') }}</span>
-    </h1>
-    <p class="mt-3 text-gray-500 max-w-xl mx-auto text-sm md:text-base">
-        Get direct discounts, seasonal promotional vouchers, and exclusive savings from trusted nearby businesses.
-    </p>
-
-    <!-- Search Box -->
-    <form action="{{ route('home') }}" method="GET" class="mt-8 max-w-2xl mx-auto flex flex-col sm:flex-row gap-2">
-        <!-- Preserve City context if selected -->
-        @if(request('city'))
-            <input type="hidden" name="city" value="{{ request('city') }}">
-        @endif
-        @if(request('category'))
-            <input type="hidden" name="category" value="{{ request('category') }}">
-        @endif
-
-        <div class="relative flex-grow">
-            <input type="text" name="search" value="{{ $searchQuery }}" placeholder="Search restaurants, salons, electronics..." 
-                class="w-full pl-4 pr-10 py-3 rounded-lg border border-gray-300 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-gray-50">
-        </div>
-        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg text-sm transition duration-150">
-            Search Offers
-        </button>
-        @if($searchQuery || request('category'))
-            <a href="{{ route('home') }}" class="inline-flex items-center justify-center border border-gray-300 hover:bg-gray-100 text-gray-700 px-4 py-3 rounded-lg text-sm font-medium">
-                Reset
-            </a>
-        @endif
-    </form>
-</div>
 
 <!-- Category Filter Tabs -->
-<div class="mb-8">
+<div class="mb-8 mt-4">
     <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">Browse Categories</h3>
     <div class="flex flex-wrap gap-2">
         <a href="{{ route('home', array_merge(request()->except('category'), ['category' => null])) }}" 
@@ -54,7 +21,9 @@
 
 <!-- Active Filter Status -->
 <div class="flex items-center justify-between mb-6">
-    <h2 class="text-xl font-bold text-gray-900">Latest Promotional Deals</h2>
+    <h2 class="text-xl font-bold text-gray-900">
+        Latest Promotional Deals @if(session('selected_city_name')) in {{ session('selected_city_name') }} @endif
+    </h2>
     <span class="text-xs text-gray-500">Showing {{ $deals->count() }} active listings</span>
 </div>
 
@@ -65,7 +34,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
         <h3 class="mt-2 text-sm font-semibold text-gray-900">No active promotions found</h3>
-        <p class="mt-1 text-sm text-gray-500">Try changing your filters, selected city, or search term.</p>
+        <p class="mt-1 text-sm text-gray-500">Try changing your filters or selected city.</p>
     </div>
 @else
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
